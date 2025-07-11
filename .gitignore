@@ -16,6 +16,7 @@ __pycache__/
 *.jpg
 *.png
 *.zip
+*.gz
 
 # 本地上传记录或缓存
 .snowflake/
@@ -23,6 +24,7 @@ __pycache__/
 temp/
 
 # Python virtual environments
+imba_env/
 env/
 venv/
 **/env/
