@@ -1,0 +1,64 @@
+# 不上传环境变量文件
+.env
+
+# 不上传 AWS 或 Snowflake 凭证
+*.pem
+*.ppk
+*.key
+*.json
+
+# 不上传临时数据/输出
+*.csv
+*.parquet
+*.log
+__pycache__/
+*.pyc
+*.jpg
+*.png
+*.zip
+
+# 本地上传记录或缓存
+.snowflake/
+.cache/
+temp/
+
+# Python virtual environments
+env/
+venv/
+**/env/
+**/venv/    
+**/snow_env/
+
+# 忽略测试专用notebook文件
+test.ipynb
+test.py
+
+# Lambda build artifacts
+/snowflake_upload/1.1_batch_ingestion_lambda_build/
+*.egg-info/
+# Only need to upload the zip file once
+!/terraform/assets/*.zip
+
+
+# Terraform variables
+*.tfvars
+
+# Terraform state and cache
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+.terraform.lock.hcl
+
+# macOS / VS Code 辅助项
+.DS_Store
+.vscode/
+
+# 示例环境变量文件（可公开上传）
+!.env.example
+
+
+# 但保留以下特定文件（取消忽略）
+# !imba_data/*.csv
+
+# 未来正式项目可以改进之处的初步构思
+future_design/*
