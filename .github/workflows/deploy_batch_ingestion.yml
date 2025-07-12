@@ -7,22 +7,30 @@ on:
     paths:
       - 'terraform/dev/**'
       - 'terraform/modules/data_ingestion/batch/**'
+      - 'terraform/modules/s3_buckets/**'
       - '.github/workflows/deploy_batch_ingestion.yml'
       - 'terraform/assets/batch_ingestion_lambda.zip'
+
 
 permissions:
   contents: read
 
 jobs:
   terraform:
-    name: Apply Batch Ingestion Module
+    name: Apply S3 Buckets and Batch Ingestion
     runs-on: ubuntu-latest
 
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ap-southeast-2
+      TF_VAR_snowflake_user: ${{ secrets.SNOWFLAKE_USER }}
+      TF_VAR_snowflake_password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+      TF_VAR_snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+      TF_VAR_snowflake_role: ${{ secrets.SNOWFLAKE_ROLE }}
+      TF_VAR_snowflake_warehouse: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
       TF_VAR_aws_region: ap-southeast-2
+      
       TF_VAR_raw_bucket: insightflow-raw-bucket
       TF_VAR_clean_bucket: insightflow-clean-bucket
 
@@ -35,13 +43,9 @@ jobs:
 
       TF_VAR_eventbridge_rule_name: batch_ingestion_trigger
       TF_VAR_eventbridge_rule_description: "Trigger batch ingestion Lambda on 30th of every month at 00:00 Sydney time"
-      TF_VAR_eventbridge_schedule_expression: cron(0 14 30 * ? *) # 00:00 Sydney time on the 30th of every month。 Update as needed. Note there is summer and winter time difference and need to adjust accordingly.
+      TF_VAR_eventbridge_schedule_expression: cron(0 14 30 * ? *)
 
-      TF_VAR_snowflake_user: ${{ secrets.SNOWFLAKE_USER }}
-      TF_VAR_snowflake_password: ${{ secrets.SNOWFLAKE_PASSWORD }}
-      TF_VAR_snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-      TF_VAR_snowflake_role: ${{ secrets.SNOWFLAKE_ROLE }}
-      TF_VAR_snowflake_warehouse: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+
 
     steps:
       - name: Checkout code
@@ -54,6 +58,18 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        working-directory: terraform/dev
+      
+      - name: Terraform Format Check
+        run: terraform fmt -check
+        working-directory: terraform/dev
+
+      - name: Terraform Plan (S3 Buckets Only)
+        run: terraform plan -input=false -target=module.s3_buckets
+        working-directory: terraform/dev
+
+      - name: Terraform Apply (S3 Buckets Only)
+        run: terraform apply -auto-approve -target=module.s3_buckets
         working-directory: terraform/dev
 
       - name: Terraform Plan (Batch Ingestion Only)
