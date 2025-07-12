@@ -5,6 +5,7 @@ import boto3
 import snowflake.connector
 from datetime import datetime, timezone
 from dotenv import load_dotenv
+from zoneinfo import ZoneInfo
 
 # load_dotenv()  # Local dev only, keep commented in Lambda
 
@@ -22,7 +23,7 @@ def lambda_handler(event=None, context=None):
     tables = event.get("tables") if event and "tables" in event else default_tables
 
     # Timestamp
-    now = datetime.now(timezone.utc)
+    now = datetime.now(ZoneInfo("Australia/Sydney"))    # Use ZoneInfo for timezone handling
     date_path = now.strftime("year=%Y/month=%m/day=%d")
     hhmm_path = now.strftime("hhmm=%H%M")
     log_lines = []
@@ -97,4 +98,4 @@ def lambda_handler(event=None, context=None):
 
 # For local test
 if __name__ == "__main__":
-    lambda_handler({"tables": ["AISLES", "DEPARTMENTS", "PRODUCTS"]}) # Test table names, adjust as needed
+    lambda_handler()
