@@ -1,9 +1,9 @@
-name: Terraform Batch Ingestion
+name: Deploy Module-batch_ingestion
 
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [main, feat_data_ingestion_batch]
     paths:
       - 'terraform/dev/**'
       - 'terraform/modules/data_ingestion/batch/**'
