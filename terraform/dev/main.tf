@@ -38,3 +38,24 @@ module "batch_ingestion" {
   raw_bucket   = var.raw_bucket
   clean_bucket = var.clean_bucket
 }
+
+module "streaming_ingestion" {
+  source      = "../modules/data_ingestion/streaming"
+  stream_name = "insightflow-dummy-streaming"
+
+  publisher_function_name = "streaming_data_publisher"
+  publisher_zip_path      = "../assets/streaming_data_publisher.zip"
+  publisher_handler       = "streaming_data_publisher.lambda_handler"
+  publisher_runtime       = "python3.13"
+  publisher_memory_size   = 128
+  publisher_timeout       = 60
+
+  firehose_name             = "insightflow-dummy-firehose"
+  raw_bucket                = "insightflow-raw-bucket"
+  transformer_function_name = "streaming_data_transformer"
+  transformer_zip_path      = "../assets/streaming_data_transformer.zip"
+  transformer_handler       = "streaming_data_transformer.lambda_handler"
+  transformer_runtime       = "python3.13"
+  transformer_memory_size   = 128
+  transformer_timeout       = 60
+}
