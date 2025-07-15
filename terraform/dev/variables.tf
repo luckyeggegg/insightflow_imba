@@ -39,3 +39,8 @@ variable "clean_bucket" {
   description = "S3 bucket for clean data"
   type        = string
 }
+
+# EC2
+variable "ami_id" {}
+variable "instance_type" {}
+variable "key_name" {}
