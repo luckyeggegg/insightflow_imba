@@ -12,6 +12,16 @@ module "s3_buckets" {
   bucket_names = [var.raw_bucket, var.clean_bucket]
 }
 
+module "vpc" {
+  source               = "../modules/vpc"
+  env                  = "insightflow_dev"
+  vpc_cidr_block       = "10.0.0.0/16"
+  public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24"]
+  private_subnet_cidrs = ["10.0.3.0/24", "10.0.4.0/24"]
+  region               = var.aws_region
+}
+
+
 module "batch_ingestion" {
   source = "../modules/data_ingestion/batch"
 
@@ -37,6 +47,9 @@ module "batch_ingestion" {
   aws_region   = var.aws_region
   raw_bucket   = var.raw_bucket
   clean_bucket = var.clean_bucket
+
+  # 确保 S3 bucket 相关资源先于数据采集模块创建
+  depends_on = [module.s3_buckets]
 }
 
 module "streaming_ingestion" {
@@ -58,4 +71,20 @@ module "streaming_ingestion" {
   transformer_runtime       = "python3.13"
   transformer_memory_size   = 128
   transformer_timeout       = 60
+
+  # 确保 S3 bucket 相关资源先于数据采集模块创建
+  depends_on = [module.s3_buckets]
+}
+
+module "ec2" {
+  source = "../modules/ec2"
+  env    = "insightflow_dev"
+
+  ami_id                     = var.ami_id
+  instance_type              = var.instance_type
+  key_name                   = var.key_name
+  public_subnet_id           = module.vpc.public_subnet_ids[0]
+  bastion_security_group_ids = [module.vpc.bastion_security_group_id]
+  region                     = var.aws_region
+  depends_on                 = [module.vpc]
 }
