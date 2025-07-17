@@ -64,3 +64,12 @@ terraform.tfstate.backup
 
 # 未来正式项目可以改进之处的初步构思
 future_design/*
+
+# 备份文件无需上传
+backup/*    
+
+# 但保留以下特定文件（取消忽略）
+!table-mappings.json
+!task-settings.json
+!table-mappings_full.json
+!external_table_def.json
