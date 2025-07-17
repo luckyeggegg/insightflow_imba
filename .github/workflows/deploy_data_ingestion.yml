@@ -61,64 +61,107 @@ jobs:
         run: terraform fmt -check
         working-directory: terraform/dev
 
+      # --- S3 Buckets ---
       - name: Terraform Plan (S3 Buckets Only)
         run: terraform plan -input=false -target=module.s3_buckets
         working-directory: terraform/dev
 
-      - name: Terraform Apply (S3 Buckets Only)
-        run: terraform apply -auto-approve -target=module.s3_buckets
-        working-directory: terraform/dev
+      - name: Terraform Apply (S3 Buckets Only) with Retry
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          retry_wait_seconds: 30
+          command: |
+            cd terraform/dev
+            terraform apply -auto-approve -target=module.s3_buckets
 
       # --- VPC ---
       - name: Terraform Plan (VPC Only)
         run: terraform plan -input=false -target=module.vpc
         working-directory: terraform/dev
 
-      - name: Terraform Apply (VPC Only)
-        run: terraform apply -auto-approve -target=module.vpc
-        working-directory: terraform/dev
+      - name: Terraform Apply (VPC Only) with Retry
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          retry_wait_seconds: 30
+          command: |
+            cd terraform/dev
+            terraform apply -auto-approve -target=module.vpc
 
       # --- RDS PostgreSQL ---
       - name: Terraform Plan (RDS PostgreSQL Only)
         run: terraform plan -input=false -target=module.rds_postgresql
         working-directory: terraform/dev
 
-      - name: Terraform Apply (RDS PostgreSQL Only)
-        run: terraform apply -auto-approve -target=module.rds_postgresql
-        working-directory: terraform/dev
+      - name: Terraform Apply (RDS PostgreSQL Only) with Retry
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 15
+          max_attempts: 3
+          retry_wait_seconds: 60
+          command: |
+            cd terraform/dev
+            terraform apply -auto-approve -target=module.rds_postgresql
 
       # --- EC2 ---
       - name: Terraform Plan (EC2 Only)
         run: terraform plan -input=false -target=module.ec2
         working-directory: terraform/dev
 
-      - name: Terraform Apply (EC2 Only)
-        run: terraform apply -auto-approve -target=module.ec2
-        working-directory: terraform/dev
+      - name: Terraform Apply (EC2 Only) with Retry
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          retry_wait_seconds: 30
+          command: |
+            cd terraform/dev
+            terraform apply -auto-approve -target=module.ec2
       
       # --- Batch Ingestion ---
       - name: Terraform Plan (Batch Ingestion Only)
         run: terraform plan -input=false -target=module.batch_ingestion
         working-directory: terraform/dev
 
-      - name: Terraform Apply (Batch Ingestion Only)
-        run: terraform apply -auto-approve -target=module.batch_ingestion
-        working-directory: terraform/dev
+      - name: Terraform Apply (Batch Ingestion Only) with Retry
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 15
+          max_attempts: 3
+          retry_wait_seconds: 60
+          command: |
+            cd terraform/dev
+            terraform apply -auto-approve -target=module.batch_ingestion
 
       # --- Streaming Ingestion ---
       - name: Terraform Plan (Streaming Ingestion Only)
         run: terraform plan -input=false -target=module.streaming_ingestion
         working-directory: terraform/dev
 
-      - name: Terraform Apply (Streaming Ingestion Only)
-        run: terraform apply -auto-approve -target=module.streaming_ingestion
-        working-directory: terraform/dev
+      - name: Terraform Apply (Streaming Ingestion Only) with Retry
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 15
+          max_attempts: 3
+          retry_wait_seconds: 60
+          command: |
+            cd terraform/dev
+            terraform apply -auto-approve -target=module.streaming_ingestion
 
       # --- Glue Crawler Raw ---
       - name: Terraform Plan (Glue Crawler Raw Only)
         run: terraform plan -input=false -target=module.glue_crawler_raw
         working-directory: terraform/dev
 
-      - name: Terraform Apply (Glue Crawler Raw Only)
-        run: terraform apply -auto-approve -target=module.glue_crawler_raw
-        working-directory: terraform/dev
+      - name: Terraform Apply (Glue Crawler Raw Only) with Retry
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 15
+          max_attempts: 3
+          retry_wait_seconds: 60
+          command: |
+            cd terraform/dev
+            terraform apply -auto-approve -target=module.glue_crawler_raw
