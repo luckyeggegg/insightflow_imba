@@ -114,7 +114,8 @@ jobs:
       - name: Terraform Apply (EC2 Only)
         run: terraform apply -auto-approve -target=module.ec2
         working-directory: terraform/dev
-
+      
+      # --- Batch Ingestion ---
       - name: Terraform Plan (Batch Ingestion Only)
         run: terraform plan -input=false -target=module.batch_ingestion
         working-directory: terraform/dev
@@ -122,7 +123,8 @@ jobs:
       - name: Terraform Apply (Batch Ingestion Only)
         run: terraform apply -auto-approve -target=module.batch_ingestion
         working-directory: terraform/dev
-
+        
+      # --- Streaming Ingestion ---
       - name: Terraform Plan (Streaming Ingestion Only)
         run: terraform plan -input=false -target=module.streaming_ingestion
         working-directory: terraform/dev
