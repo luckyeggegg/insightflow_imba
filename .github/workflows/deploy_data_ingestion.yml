@@ -20,46 +20,31 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ap-southeast-2
-      TF_VAR_snowflake_user: ${{ secrets.SNOWFLAKE_USER }}
-      TF_VAR_snowflake_password: ${{ secrets.SNOWFLAKE_PASSWORD }}
-      TF_VAR_snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-      TF_VAR_snowflake_role: ${{ secrets.SNOWFLAKE_ROLE }}
-      TF_VAR_snowflake_warehouse: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
 
       TF_VAR_aws_region: ap-southeast-2
       TF_VAR_raw_bucket: insightflow-raw-bucket
       TF_VAR_clean_bucket: insightflow-clean-bucket
 
-      ### 以下变量已经在main.tf中显式定义
-      # TF_VAR_lambda_function_name: batch_ingestion
-      # TF_VAR_lambda_handler: lambda_function.lambda_handler
-      # TF_VAR_lambda_runtime: python3.13
-      # TF_VAR_lambda_zip_path: ./assets/batch_ingestion_lambda.zip
-      # TF_VAR_lambda_timeout: 900
-      # TF_VAR_lambda_memory_size: 1024
+      TF_VAR_snowflake_user: ${{ secrets.SNOWFLAKE_USER }}
+      TF_VAR_snowflake_password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+      TF_VAR_snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+      TF_VAR_snowflake_warehouse: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+      TF_VAR_snowflake_role: ${{ secrets.SNOWFLAKE_ROLE }}
 
-      # TF_VAR_eventbridge_rule_name: batch_ingestion_trigger
-      # TF_VAR_eventbridge_rule_description: "Trigger batch ingestion Lambda on 30th of every month at 00:00 Sydney time"
-      # TF_VAR_eventbridge_schedule_expression: cron(0 14 30 * ? *)
+      TF_VAR_db_name: insightflow_imba
+      TF_VAR_db_username: ${{ secrets.DB_USERNAME }}
+      TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
 
-      # TF_VAR_publisher_function_name: streaming_data_publisher
-      # TF_VAR_publisher_zip_path: ./assets/streaming_data_publisher.zip
-      # TF_VAR_publisher_handler: streaming_data_publisher.lambda_handler
-      # TF_VAR_publisher_runtime: python3.13
-      # TF_VAR_publisher_memory_size: 128
-      # TF_VAR_publisher_timeout: 60
+      TF_VAR_ami_id: ami-00839deb72faa8a04
+      TF_VAR_instance_type: t2.micro
+      TF_VAR_key_name: de_test_ec2
 
-      # TF_VAR_transformer_function_name: streaming_data_transformer
-      # TF_VAR_transformer_zip_path: ./assets/streaming_data_transformer.zip
-      # TF_VAR_transformer_handler: streaming_data_transformer.lambda_handler
-      # TF_VAR_transformer_runtime: python3.13
-      # TF_VAR_transformer_memory_size: 128
-      # TF_VAR_transformer_timeout: 60
-
-      # TF_VAR_firehose_name: insightflow-dummy-firehose
+      TF_VAR_raw_prefix: data/batch
+      TF_VAR_aws_az: ap-southeast-2a
 
 
 
@@ -123,7 +108,7 @@ jobs:
       - name: Terraform Apply (Batch Ingestion Only)
         run: terraform apply -auto-approve -target=module.batch_ingestion
         working-directory: terraform/dev
-        
+
       # --- Streaming Ingestion ---
       - name: Terraform Plan (Streaming Ingestion Only)
         run: terraform plan -input=false -target=module.streaming_ingestion
