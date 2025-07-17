@@ -3,11 +3,10 @@ name: Deploy S3 buckets & Module-data_ingestion (batch & streaming)
 on:
   workflow_dispatch:
   push:
-    branches: [main, feat_data_ingestion_batch, feat_data_ingestion_streaming]
+    branches: [main]
     paths:
       - 'terraform/dev/**'
-      - 'terraform/modules/data_ingestion/**'
-      - 'terraform/modules/s3_buckets/**'
+      - 'terraform/modules/**'
       - '.github/workflows/deploy_data_ingestion.yml'
       - 'terraform/assets/**'
 
@@ -89,6 +88,33 @@ jobs:
         run: terraform apply -auto-approve -target=module.s3_buckets
         working-directory: terraform/dev
 
+      # --- VPC ---
+      - name: Terraform Plan (VPC Only)
+        run: terraform plan -input=false -target=module.vpc
+        working-directory: terraform/dev
+
+      - name: Terraform Apply (VPC Only)
+        run: terraform apply -auto-approve -target=module.vpc
+        working-directory: terraform/dev
+
+      # --- RDS PostgreSQL ---
+      - name: Terraform Plan (RDS PostgreSQL Only)
+        run: terraform plan -input=false -target=module.rds_postgresql
+        working-directory: terraform/dev
+
+      - name: Terraform Apply (RDS PostgreSQL Only)
+        run: terraform apply -auto-approve -target=module.rds_postgresql
+        working-directory: terraform/dev
+
+      # --- EC2 ---
+      - name: Terraform Plan (EC2 Only)
+        run: terraform plan -input=false -target=module.ec2
+        working-directory: terraform/dev
+
+      - name: Terraform Apply (EC2 Only)
+        run: terraform apply -auto-approve -target=module.ec2
+        working-directory: terraform/dev
+
       - name: Terraform Plan (Batch Ingestion Only)
         run: terraform plan -input=false -target=module.batch_ingestion
         working-directory: terraform/dev
@@ -103,4 +129,13 @@ jobs:
 
       - name: Terraform Apply (Streaming Ingestion Only)
         run: terraform apply -auto-approve -target=module.streaming_ingestion
+        working-directory: terraform/dev
+
+      # --- Glue Crawler Raw ---
+      - name: Terraform Plan (Glue Crawler Raw Only)
+        run: terraform plan -input=false -target=module.glue_crawler_raw
+        working-directory: terraform/dev
+
+      - name: Terraform Apply (Glue Crawler Raw Only)
+        run: terraform apply -auto-approve -target=module.glue_crawler_raw
         working-directory: terraform/dev

@@ -110,14 +110,40 @@ module "rds_postgresql" {
   depends_on                  = [module.vpc]
 }
 
-# AWS Glue模块 - 用于数据catalog和ETL
-# glue_raw_crawler
-module "glue_raw_crawler" {
-  source = "../modules/glue_raw_crawler"
+# =============================
+# Glue Crawler for Raw Data
+# =============================
+module "glue_crawler_raw" {
+  source = "../modules/glue_crawler_raw"
+
+  env                = "insightflow_dev"
+  s3_bucket_name     = var.raw_bucket
+  s3_raw_data_prefix = var.raw_prefix
+  database_name      = "insightflow_imba_raw_data_catalog"
+  table_prefix       = "raw_"
+
+  # Optional: Set crawler schedule (null means manual execution)
+  crawler_schedule = "cron(0 15 30 * ? *)"        # Monthly on 1st day at 2 AM UTC (after batch ingestion)
+
+  tags = {
+    Project     = "InsightFlow"
+    Environment = "insightflow_dev"
+    Owner       = "IMBADataTeam"
+    Purpose     = "RawDataCrawling"
+  }
+
+  depends_on = [module.s3_buckets]
 }
 
-# DMS 数据同步模块
-module "dms" {
-  source = "../modules/dms"
- 
-}
+# =============================
+# DMS Module (Currently Disabled)
+# =============================
+# NOTE: DMS module is temporarily disabled while being redesigned 
+# for the new architecture: Glue Crawler → Glue Table → DMS → RDS
+# The new DMS will use Glue Data Catalog as source instead of direct S3
+
+# module "dms" {
+#   source = "../modules/dms"
+#   
+#   # Will be updated with new parameters for Glue Data Catalog integration
+# }
