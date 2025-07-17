@@ -3,7 +3,7 @@ name: Deploy S3 buckets & Module-data_ingestion (batch & streaming)
 on:
   workflow_dispatch:
   push:
-    branches: [main, feat_data_ingestion_batch, feat_data_ingestion_streaming]
+    branches: [main]
     paths:
       - 'terraform/dev/**'
       - 'terraform/modules/**'
@@ -43,6 +43,11 @@ jobs:
 
       TF_VAR_raw_prefix: data/batch
       TF_VAR_aws_az: ap-southeast-2a
+
+      # Glue Crawler Configuration Variables
+      # TF_VAR_recrawl_behavior: CRAWL_EVERYTHING # Only for the first crawler run
+      TF_VAR_recrawl_behavior: CRAWL_NEW_FOLDERS_ONLY # Incremental crawling for subsequent runs
+      TF_VAR_crawler_schedule: "cron(0 15 30 * ? *)"
 
     steps:
       - name: Checkout code
@@ -152,6 +157,10 @@ jobs:
             terraform apply -auto-approve -target=module.streaming_ingestion
 
       # --- Glue Crawler Raw ---
+      - name: Terraform Format Check (Glue Crawler Raw Module)
+        run: terraform fmt -check -recursive
+        working-directory: terraform/modules/glue_crawler_raw
+
       - name: Terraform Plan (Glue Crawler Raw Only)
         run: terraform plan -input=false -target=module.glue_crawler_raw
         working-directory: terraform/dev
