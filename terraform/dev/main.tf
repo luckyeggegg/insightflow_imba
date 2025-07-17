@@ -123,7 +123,7 @@ module "glue_crawler_raw" {
   table_prefix       = "raw_"
 
   # Optional: Set crawler schedule (null means manual execution)
-  crawler_schedule = "cron(0 15 30 * ? *)"        # Monthly on 1st day at 2 AM UTC (after batch ingestion)
+  crawler_schedule = "cron(0 15 30 * ? *)" # Monthly on 1st day at 2 AM UTC (after batch ingestion)
 
   tags = {
     Project     = "InsightFlow"
