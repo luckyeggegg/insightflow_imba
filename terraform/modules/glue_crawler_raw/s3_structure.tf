@@ -10,7 +10,7 @@ locals {
 # � 检查每个表目录是否已有真实数据
 data "aws_s3_objects" "existing_data" {
   for_each = toset(local.table_names)
-  
+
   bucket = var.s3_bucket_name
   prefix = "${var.s3_raw_data_prefix}/${each.value}/"
 }
@@ -25,16 +25,16 @@ resource "aws_s3_object" "glue_crawler_placeholders" {
     # 3. 只有当没有真实数据文件时才创建占位符
     if length([
       for key in data.aws_s3_objects.existing_data[table].keys :
-      key if !endswith(key, "placeholder.txt") && 
-             !endswith(key, "_placeholder_for_crawler.txt") &&
-             !endswith(key, "/") &&
-             !strcontains(key, "_$folder$")  # 排除 S3 文件夹标记
+      key if !endswith(key, "placeholder.txt") &&
+      !endswith(key, "_placeholder_for_crawler.txt") &&
+      !endswith(key, "/") &&
+      !strcontains(key, "_$folder$") # 排除 S3 文件夹标记
     ]) == 0
   }
-  
+
   bucket = var.s3_bucket_name
   key    = "${var.s3_raw_data_prefix}/${each.value}/_placeholder_for_crawler.txt"
-  
+
   # 🔧 固定内容，避免 timestamp() 导致的重复更新
   content = <<EOF
 # Glue Crawler 智能占位符
