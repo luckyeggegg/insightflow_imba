@@ -86,5 +86,38 @@ module "ec2" {
   public_subnet_id           = module.vpc.public_subnet_ids[0]
   bastion_security_group_ids = [module.vpc.bastion_security_group_id]
   region                     = var.aws_region
-  depends_on                 = [module.vpc]
+
+  rds_endpoint = module.rds_postgresql.rds_endpoint
+  rds_host     = module.rds_postgresql.rds_host
+  rds_port     = module.rds_postgresql.rds_port
+  db_name      = var.db_name
+  db_username  = var.db_username
+  db_password  = var.db_password
+  sql_s3_path  = "s3://insightflow-imba-scripts/create_tables.sql"
+
+  depends_on = [module.vpc, module.rds_postgresql]
+}
+
+module "rds_postgresql" {
+  source = "../modules/rds_postgresql"
+  env    = "insightflow-dev"
+
+  db_name                     = var.db_name
+  db_username                 = var.db_username
+  db_password                 = var.db_password
+  private_subnet_ids          = module.vpc.private_subnet_ids
+  postgres_security_group_ids = [module.vpc.postgres_security_group_id]
+  depends_on                  = [module.vpc]
+}
+
+# AWS Glue模块 - 用于数据catalog和ETL
+# glue_raw_crawler
+module "glue_raw_crawler" {
+  source = "../modules/glue_raw_crawler"
+}
+
+# DMS 数据同步模块
+module "dms" {
+  source = "../modules/dms"
+ 
 }
