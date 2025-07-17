@@ -121,9 +121,10 @@ module "glue_crawler_raw" {
   s3_raw_data_prefix = var.raw_prefix
   database_name      = "insightflow_imba_raw_data_catalog"
   table_prefix       = "raw_"
+  recrawl_behavior   = var.recrawl_behavior
 
-  # Optional: Set crawler schedule (null means manual execution)
-  crawler_schedule = "cron(0 15 30 * ? *)" # Monthly on 1st day at 2 AM UTC (after batch ingestion)
+  # 使用变量设置爬虫调度，而不是硬编码
+  crawler_schedule = var.crawler_schedule
 
   tags = {
     Project     = "InsightFlow"

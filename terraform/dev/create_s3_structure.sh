@@ -46,7 +46,7 @@ if ! aws sts get-caller-identity &> /dev/null; then
 fi
 
 # Array of tables
-tables=("orders" "products" "departments" "aisles" "order_products__prior" "order_products__train")
+tables=("orders" "products" "departments" "aisles" "order_products_prior" "order_products_train")
 
 # Create temporary file
 temp_file="placeholder.txt"
