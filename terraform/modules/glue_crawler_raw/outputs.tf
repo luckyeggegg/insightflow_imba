@@ -41,7 +41,7 @@ output "table_names" {
   }
 }
 
-# 新增：增量爬取相关输出
+# 增量爬取相关输出
 output "crawl_behavior" {
   description = "当前使用的爬取策略"
   value       = var.recrawl_behavior
