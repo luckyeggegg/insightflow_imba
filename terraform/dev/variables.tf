@@ -1,3 +1,4 @@
+
 variable "snowflake_user" {
   description = "Snowflake user for Lambda environment"
   type        = string
@@ -44,3 +45,31 @@ variable "clean_bucket" {
 variable "ami_id" {}
 variable "instance_type" {}
 variable "key_name" {}
+
+# rds_postgresql
+variable "db_name" {
+  description = "Database name for RDS PostgreSQL"
+  type        = string
+}
+
+variable "db_username" {
+  description = "Master username for RDS PostgreSQL"
+  type        = string
+}
+
+variable "db_password" {
+  description = "Master password for RDS PostgreSQL"
+  type        = string
+  sensitive   = true
+}
+
+# dms
+variable "raw_prefix" {
+  description = "S3 prefix/folder for all DMS同步表的公共父目录,如 data/batch/"
+  type        = string
+}
+
+variable "aws_az" {
+  description = "Availability zone for DMS instance"
+  type        = string
+}
