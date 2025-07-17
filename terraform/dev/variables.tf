@@ -55,6 +55,7 @@ variable "db_name" {
 variable "db_username" {
   description = "Master username for RDS PostgreSQL"
   type        = string
+  sensitive   = true
 }
 
 variable "db_password" {
