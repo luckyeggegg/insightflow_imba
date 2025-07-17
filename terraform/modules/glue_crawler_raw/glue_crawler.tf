@@ -42,7 +42,7 @@ resource "aws_glue_crawler" "raw_orders" {
   schema_change_policy {
     # 🚀 当使用 CRAWL_NEW_FOLDERS_ONLY 时，AWS要求两个行为都必须是LOG
     update_behavior = var.recrawl_behavior == "CRAWL_NEW_FOLDERS_ONLY" ? "LOG" : "UPDATE_IN_DATABASE"
-    delete_behavior = "LOG"  # 删除行为始终使用LOG（安全策略）
+    delete_behavior = "LOG" # 删除行为始终使用LOG（安全策略）
   }
 
   # 🚀 核心功能：增量爬取配置
@@ -91,7 +91,7 @@ resource "aws_glue_crawler" "raw_products" {
   schema_change_policy {
     # 🚀 当使用 CRAWL_NEW_FOLDERS_ONLY 时，AWS要求两个行为都必须是LOG
     update_behavior = var.recrawl_behavior == "CRAWL_NEW_FOLDERS_ONLY" ? "LOG" : "UPDATE_IN_DATABASE"
-    delete_behavior = "LOG"  # 删除行为始终使用LOG（安全策略）
+    delete_behavior = "LOG" # 删除行为始终使用LOG（安全策略）
   }
 
   # 🚀 核心功能：增量爬取配置
@@ -139,7 +139,7 @@ resource "aws_glue_crawler" "raw_departments" {
   schema_change_policy {
     # 🚀 当使用 CRAWL_NEW_FOLDERS_ONLY 时，AWS要求两个行为都必须是LOG
     update_behavior = var.recrawl_behavior == "CRAWL_NEW_FOLDERS_ONLY" ? "LOG" : "UPDATE_IN_DATABASE"
-    delete_behavior = "LOG"  # 删除行为始终使用LOG（安全策略）
+    delete_behavior = "LOG" # 删除行为始终使用LOG（安全策略）
   }
 
   # 🚀 核心功能：增量爬取配置
@@ -187,7 +187,7 @@ resource "aws_glue_crawler" "raw_aisles" {
   schema_change_policy {
     # 🚀 当使用 CRAWL_NEW_FOLDERS_ONLY 时，AWS要求两个行为都必须是LOG
     update_behavior = var.recrawl_behavior == "CRAWL_NEW_FOLDERS_ONLY" ? "LOG" : "UPDATE_IN_DATABASE"
-    delete_behavior = "LOG"  # 删除行为始终使用LOG（安全策略）
+    delete_behavior = "LOG" # 删除行为始终使用LOG（安全策略）
   }
 
   # 🚀 核心功能：增量爬取配置
@@ -242,7 +242,7 @@ resource "aws_glue_crawler" "raw_order_products_prior" {
   schema_change_policy {
     # 🚀 当使用 CRAWL_NEW_FOLDERS_ONLY 时，AWS要求两个行为都必须是LOG
     update_behavior = var.recrawl_behavior == "CRAWL_NEW_FOLDERS_ONLY" ? "LOG" : "UPDATE_IN_DATABASE"
-    delete_behavior = "LOG"  # 删除行为始终使用LOG（安全策略）
+    delete_behavior = "LOG" # 删除行为始终使用LOG（安全策略）
   }
 
   # 🚀 核心功能：增量爬取配置
@@ -290,7 +290,7 @@ resource "aws_glue_crawler" "raw_order_products_train" {
   schema_change_policy {
     # 🚀 当使用 CRAWL_NEW_FOLDERS_ONLY 时，AWS要求两个行为都必须是LOG
     update_behavior = var.recrawl_behavior == "CRAWL_NEW_FOLDERS_ONLY" ? "LOG" : "UPDATE_IN_DATABASE"
-    delete_behavior = "LOG"  # 删除行为始终使用LOG（安全策略）
+    delete_behavior = "LOG" # 删除行为始终使用LOG（安全策略）
   }
 
   # 🚀 核心功能：增量爬取配置

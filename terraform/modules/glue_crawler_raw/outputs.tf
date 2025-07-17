@@ -20,24 +20,24 @@ output "glue_role_arn" {
 output "crawler_names" {
   description = "所有爬虫名称"
   value = {
-    orders                = aws_glue_crawler.raw_orders.name
-    products              = aws_glue_crawler.raw_products.name
-    departments           = aws_glue_crawler.raw_departments.name
-    aisles                = aws_glue_crawler.raw_aisles.name
-    order_products_prior  = aws_glue_crawler.raw_order_products_prior.name
-    order_products_train  = aws_glue_crawler.raw_order_products_train.name
+    orders               = aws_glue_crawler.raw_orders.name
+    products             = aws_glue_crawler.raw_products.name
+    departments          = aws_glue_crawler.raw_departments.name
+    aisles               = aws_glue_crawler.raw_aisles.name
+    order_products_prior = aws_glue_crawler.raw_order_products_prior.name
+    order_products_train = aws_glue_crawler.raw_order_products_train.name
   }
 }
 
 output "table_names" {
   description = "爬虫将创建的表名称"
   value = {
-    orders                = "${var.table_prefix}orders"
-    products              = "${var.table_prefix}products"
-    departments           = "${var.table_prefix}departments"
-    aisles                = "${var.table_prefix}aisles"
-    order_products_prior  = "${var.table_prefix}order_products_prior"
-    order_products_train  = "${var.table_prefix}order_products_train"
+    orders               = "${var.table_prefix}orders"
+    products             = "${var.table_prefix}products"
+    departments          = "${var.table_prefix}departments"
+    aisles               = "${var.table_prefix}aisles"
+    order_products_prior = "${var.table_prefix}order_products_prior"
+    order_products_train = "${var.table_prefix}order_products_train"
   }
 }
 

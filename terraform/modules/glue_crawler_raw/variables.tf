@@ -29,7 +29,7 @@ variable "table_prefix" {
 variable "crawler_schedule" {
   description = "Schedule for running crawlers (cron expression)"
   type        = string
-  default     = "cron(0 2 * * ? *)"  # 每天凌晨2点运行
+  default     = "cron(0 2 * * ? *)" # 每天凌晨2点运行
 }
 
 variable "recrawl_behavior" {
@@ -38,7 +38,7 @@ variable "recrawl_behavior" {
   default     = "CRAWL_NEW_FOLDERS_ONLY"
   validation {
     condition = contains([
-      "CRAWL_EVERYTHING", 
+      "CRAWL_EVERYTHING",
       "CRAWL_NEW_FOLDERS_ONLY"
     ], var.recrawl_behavior)
     error_message = "Recrawl behavior must be either CRAWL_EVERYTHING or CRAWL_NEW_FOLDERS_ONLY."
