@@ -63,9 +63,9 @@ variable "db_password" {
   sensitive   = true
 }
 
-# dms
+# S3, glue_crawler_raw, Data Processing
 variable "raw_prefix" {
-  description = "S3 prefix/folder for all DMS同步表的公共父目录,如 data/batch/"
+  description = "S3 prefix/folder for raw data (e.g., 'data/batch/')"
   type        = string
 }
 
