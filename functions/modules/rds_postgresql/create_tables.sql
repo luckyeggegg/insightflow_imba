@@ -62,9 +62,9 @@ CREATE TABLE insightflow_raw.products (
     FOREIGN KEY (department_id) REFERENCES insightflow_raw.departments(department_id)
 );
 
--- Order_products__prior Orders Table
-DROP TABLE IF EXISTS insightflow_raw.order_products__prior;
-CREATE TABLE insightflow_raw.order_products__prior (
+-- Order_products_prior Orders Table
+DROP TABLE IF EXISTS insightflow_raw.order_products_prior;
+CREATE TABLE insightflow_raw.order_products_prior (
     order_id           INTEGER NOT NULL,
     product_id         INTEGER NOT NULL,
     add_to_cart_order  INTEGER NOT NULL,
@@ -78,9 +78,9 @@ CREATE TABLE insightflow_raw.order_products__prior (
     FOREIGN KEY (product_id) REFERENCES insightflow_raw.products(product_id)
 );
 
--- Order_products__train Orders Table
-DROP TABLE IF EXISTS insightflow_raw.order_products__train;
-CREATE TABLE insightflow_raw.order_products__train (
+-- Order_products_train Orders Table
+DROP TABLE IF EXISTS insightflow_raw.order_products_train;
+CREATE TABLE insightflow_raw.order_products_train (
     order_id           INTEGER NOT NULL,
     product_id         INTEGER NOT NULL,
     add_to_cart_order  INTEGER NOT NULL,
