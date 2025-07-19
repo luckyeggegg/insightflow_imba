@@ -224,7 +224,7 @@ resource "aws_glue_crawler" "raw_aisles" {
 # Order Products Prior Crawler (简化增量版)
 # -----------------------------
 resource "aws_glue_crawler" "raw_order_products_prior" {
-  name          = "${var.env}_crawler_raw_order-products-prior"
+  name          = "${var.env}_crawler_raw_order_products_prior"
   role          = aws_iam_role.glue_crawler_role.arn
   database_name = aws_glue_catalog_database.raw_data_catalog.name
   table_prefix  = var.table_prefix
@@ -261,7 +261,7 @@ resource "aws_glue_crawler" "raw_order_products_prior" {
   ]
 
   tags = merge(var.tags, {
-    Name        = "${var.env}_crawler_raw_order-products-prior"
+    Name        = "${var.env}_crawler_raw_order_products_prior"
     Environment = var.env
     Table       = "order_products_prior"
     CrawlType   = var.recrawl_behavior
@@ -272,7 +272,7 @@ resource "aws_glue_crawler" "raw_order_products_prior" {
 # Order Products Train Crawler (简化增量版)
 # -----------------------------
 resource "aws_glue_crawler" "raw_order_products_train" {
-  name          = "${var.env}_crawler_raw_order-products-train"
+  name          = "${var.env}_crawler_raw_order_products_train"
   role          = aws_iam_role.glue_crawler_role.arn
   database_name = aws_glue_catalog_database.raw_data_catalog.name
   table_prefix  = var.table_prefix
@@ -309,7 +309,7 @@ resource "aws_glue_crawler" "raw_order_products_train" {
   ]
 
   tags = merge(var.tags, {
-    Name        = "${var.env}_crawler_raw_order-products-train"
+    Name        = "${var.env}_crawler_raw_order_products_train"
     Environment = var.env
     Table       = "order_products_train"
     CrawlType   = var.recrawl_behavior

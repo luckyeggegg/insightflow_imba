@@ -14,7 +14,6 @@ resource "aws_s3_object" "glue_crawler_placeholders" {
   bucket = var.s3_bucket_name
   key    = "${var.s3_raw_data_prefix}/${each.value}/_placeholder_for_crawler.txt"
 
-  # 🔧 固定内容，避免 timestamp() 导致的重复更新
   content = <<EOF
 # Glue Crawler 占位符
 # Purpose: 确保 S3 目录存在以供 Glue Crawler 部署使用
@@ -38,4 +37,10 @@ EOF
     Table       = each.value
     AutoManaged = "true"
   })
+
+  lifecycle {
+    ignore_changes = [key]
+  }
 }
+
+// ...existing code...
