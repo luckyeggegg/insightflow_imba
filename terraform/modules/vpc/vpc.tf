@@ -169,23 +169,11 @@ resource "aws_security_group_rule" "postgres_ingress_pgsql_from_bastion" {
   description              = "Allow PostgreSQL from Bastion"
 }
 
-resource "aws_security_group_rule" "postgres_ingress_pgsql_from_dms" {
-  type                     = "ingress"
-  from_port                = 5432
-  to_port                  = 5432
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.dms_sg.id
-  security_group_id        = aws_security_group.postgres.id
-  description              = "Allow PostgreSQL from DMS"
-}
 
-
-
-
-# DMS Security Group
-resource "aws_security_group" "dms_sg" {
-  name        = "dms-security-group"
-  description = "Security group for DMS replication instance"
+# Lambda function Security Group
+resource "aws_security_group" "lambda_sg" {
+  name        = "${var.env}-lambda-sg"
+  description = "Allow Lambda outbound"
   vpc_id      = aws_vpc.main.id
 
   egress {
@@ -194,7 +182,49 @@ resource "aws_security_group" "dms_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = {
+    Name = "${var.env}-lambda-sg"
+  }
 }
+
+resource "aws_security_group_rule" "postgres_ingress_pgsql_from_lambda" {
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.lambda_sg.id
+  security_group_id        = aws_security_group.postgres.id
+  description              = "Allow PostgreSQL from Lambda"
+}
+
+
+# resource "aws_security_group_rule" "postgres_ingress_pgsql_from_dms" {
+#   type                     = "ingress"
+#   from_port                = 5432
+#   to_port                  = 5432
+#   protocol                 = "tcp"
+#   source_security_group_id = aws_security_group.dms_sg.id
+#   security_group_id        = aws_security_group.postgres.id
+#   description              = "Allow PostgreSQL from DMS"
+# }
+
+
+
+
+# DMS Security Group
+# resource "aws_security_group" "dms_sg" {
+#   name        = "dms-security-group"
+#   description = "Security group for DMS replication instance"
+#   vpc_id      = aws_vpc.main.id
+
+#   egress {
+#     from_port   = 0
+#     to_port     = 0
+#     protocol    = "-1"
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
+# }
 
 
 
@@ -231,6 +261,9 @@ resource "aws_security_group" "dms_sg" {
 #   source_security_group_id = aws_security_group.bastion.id
 #   description              = "Allow bastion EC2"
 # }
+
+
+
 
 # ---------------------
 # VPC endpoints
@@ -277,19 +310,19 @@ resource "aws_vpc_endpoint" "s3" {
 #   }
 # }
 
-resource "aws_vpc_endpoint" "dms" {
-  service_name       = "com.amazonaws.${var.region}.dms"
-  vpc_id             = aws_vpc.main.id
-  vpc_endpoint_type  = "Interface"
-  subnet_ids         = aws_subnet.private[*].id
-  security_group_ids = [aws_security_group.dms_sg.id]
+# resource "aws_vpc_endpoint" "dms" {
+#   service_name       = "com.amazonaws.${var.region}.dms"
+#   vpc_id             = aws_vpc.main.id
+#   vpc_endpoint_type  = "Interface"
+#   subnet_ids         = aws_subnet.private[*].id
+#   security_group_ids = [aws_security_group.dms_sg.id]
 
-  private_dns_enabled = true
+#   private_dns_enabled = true
 
-  tags = {
-    Name = "${var.env}-dms-endpoint"
-  }
-}
+#   tags = {
+#     Name = "${var.env}-dms-endpoint"
+#   }
+# }
 
 
 

@@ -1,4 +1,3 @@
-
 variable "snowflake_user" {
   description = "Snowflake user for Lambda environment"
   type        = string
@@ -92,3 +91,66 @@ variable "crawler_schedule" {
   type        = string
   default     = "cron(0 15 30 * ? *)"
 }
+
+# variable "lambda_zip_path" {
+#   description = "Path to Lambda deployment package zip file"
+#   type        = string
+# }
+
+# variable "s3_bucket_arn" {
+#   description = "ARN of the S3 bucket"
+#   type        = string
+# }
+
+# variable "rds_host" {
+#   description = "RDS PostgreSQL host"
+#   type        = string
+# }
+
+# variable "rds_port" {
+#   description = "RDS PostgreSQL port"
+#   type        = string
+#   default     = "5432"
+# }
+
+variable "eventbridge_schedule" {
+  description = "EventBridge schedule expression for Lambda trigger"
+  type        = string
+  default     = "cron(0 16 30 * ? *)"
+}
+
+variable "table_name" {
+  description = "Target table names in RDS (support multiple tables for sync)"
+  type        = list(string)
+  default     = ["orders", "aisles", "products", "departments"]
+}
+
+variable "s3_key_prefix" {
+  description = "S3 key prefix for raw data (e.g., 'data/batch/')"
+  type        = list(string)
+  default     = []
+}
+
+variable "start_ts" {
+  description = "Start timestamp for data sync (optional)"
+  type        = string
+  default     = ""
+}
+
+variable "end_ts" {
+  description = "End timestamp for data sync (optional)"
+  type        = string
+  default     = ""
+}
+
+# variable "schema_name" {
+#   description = "Target schema name in RDS"
+#   type        = string
+#   default     = "insightflow_raw"
+# }
+
+# variable "batch_size" {
+#   description = "Batch size for RDS insert"
+#   type        = string
+#   default     = "100000"
+# }
