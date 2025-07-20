@@ -45,11 +45,11 @@ jobs:
       TF_VAR_aws_az: ap-southeast-2a
 
       # Data Sync Raw Configuration Variables
-      TF_VAR_table_name: "orders"
-      TF_VAR_s3_key_prefix: "data/batch/orders/"
-      TF_VAR_start_ts: "1900-01-01-0000"
-      TF_VAR_end_ts: "2099-12-31-2359"
-      TF_VAR_eventbridge_schedule: "cron(0 16 * * ? *)"  # 每天UTC 16:00 (悉尼时间凌晨2:00)
+      TF_VAR_table_name: '["orders", "aisles", "products", "departments", "order_products_prior", "order_products_train"]'
+      TF_VAR_s3_key_prefix: '["data/batch/orders/", "data/batch/aisles/", "data/batch/products/", "data/batch/departments/", "data/batch/order_products_prior/", "data/batch/order_products_train/"]'
+      TF_VAR_start_ts: 1900-01-01-0000
+      TF_VAR_end_ts: 2099-12-31-2359
+      TF_VAR_eventbridge_schedule: cron(0 16 * * ? *)
 
       # Glue Crawler Configuration Variables
       # TF_VAR_recrawl_behavior: CRAWL_EVERYTHING # Only for the first crawler run

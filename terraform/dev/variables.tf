@@ -120,27 +120,27 @@ variable "eventbridge_schedule" {
 }
 
 variable "table_name" {
-  description = "Target table names in RDS (support multiple tables for sync)"
+  description = "List of database table names to sync data to"
   type        = list(string)
-  default     = ["orders", "aisles", "products", "departments"]
+  default     = ["orders"]
 }
 
 variable "s3_key_prefix" {
-  description = "S3 key prefix for raw data (e.g., 'data/batch/')"
+  description = "List of S3 key prefixes to filter objects for processing"
   type        = list(string)
-  default     = []
+  default     = ["data/batch/orders/"]
 }
 
 variable "start_ts" {
   description = "Start timestamp for data sync (optional)"
   type        = string
-  default     = ""
+  default     = "1900-01-01-0000"
 }
 
 variable "end_ts" {
   description = "End timestamp for data sync (optional)"
   type        = string
-  default     = ""
+  default     = "2099-12-31-2359"
 }
 
 # variable "schema_name" {
