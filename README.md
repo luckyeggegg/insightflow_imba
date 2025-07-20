@@ -167,7 +167,7 @@ Streaming ingestion module (future extension):
 🧑‍💻 Author
 
 Yifan Sun (Aaron)
-[LinkedIn](www.linkedin.com/in/yifan-sun-aaron/)
+[LinkedIn](http://www.linkedin.com/in/yifan-sun-aaron/)
 
 Zidan Guo (Tobby)
 [LinkedIn]()
