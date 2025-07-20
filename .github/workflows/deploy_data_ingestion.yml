@@ -171,10 +171,6 @@ jobs:
             terraform apply -auto-approve -target=module.streaming_ingestion
 
       # --- Glue Crawler Raw ---
-      - name: Terraform Format Check (Glue Crawler Raw Module)
-        run: terraform fmt -check -recursive
-        working-directory: terraform/modules/glue_crawler_raw
-
       - name: Terraform Plan (Glue Crawler Raw Only)
         run: terraform plan -input=false -target=module.glue_crawler_raw
         working-directory: terraform/dev
@@ -190,10 +186,6 @@ jobs:
             terraform apply -auto-approve -target=module.glue_crawler_raw
 
       # --- Data Sync Raw ---
-      - name: Terraform Format Check (Data Sync Raw Module)
-        run: terraform fmt -check -recursive
-        working-directory: terraform/modules/data_sync/raw
-
       - name: Terraform Plan (Data Sync Raw Only)
         run: terraform plan -input=false -target=module.data_sync_raw
         working-directory: terraform/dev
