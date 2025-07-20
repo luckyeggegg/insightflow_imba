@@ -17,6 +17,7 @@ __pycache__/
 *.png
 *.zip
 *.gz
+**.drawio
 
 # 本地上传记录或缓存
 .snowflake/
@@ -74,3 +75,4 @@ backup/*
 !task-settings.json
 !table-mappings_full.json
 !external_table_def.json
+!data_ingestion_*.png
