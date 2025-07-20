@@ -7,18 +7,18 @@ resource "aws_lambda_function" "s3_to_rds_raw" {
 
   environment {
     variables = {
-      S3_BUCKET      = var.s3_bucket_name
-      RDS_HOST       = var.rds_host
-      RDS_PORT       = var.rds_port
-      RDS_DB         = var.rds_db
-      RDS_USER       = var.rds_user
-      RDS_PASSWORD   = var.rds_password
-      TABLE_NAME     = join(",", var.table_name)
-      SCHEMA_NAME    = var.schema_name
-      BATCH_SIZE     = var.batch_size
-      S3_KEY_PREFIX  = join(",", var.s3_key_prefix)  # 多前缀支持，逗号分隔
-      START_TIMESTAMP = var.start_ts  # 手动定义需同步数据的起始时间戳
-      END_TIMESTAMP   = var.end_ts    # 手动定义需同步数据的结束时间戳
+      S3_BUCKET       = var.s3_bucket_name
+      RDS_HOST        = var.rds_host
+      RDS_PORT        = var.rds_port
+      RDS_DB          = var.rds_db
+      RDS_USER        = var.rds_user
+      RDS_PASSWORD    = var.rds_password
+      TABLE_NAME      = jsonencode(var.table_name)
+      SCHEMA_NAME     = var.schema_name
+      BATCH_SIZE      = var.batch_size
+      S3_KEY_PREFIX   = jsonencode(var.s3_key_prefix)
+      START_TIMESTAMP = var.start_ts
+      END_TIMESTAMP   = var.end_ts
     }
   }
 
