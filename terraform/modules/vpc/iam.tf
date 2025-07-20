@@ -46,25 +46,25 @@ resource "aws_iam_role_policy_attachment" "rds_monitoring_policy" {
 }
 
 # DMS Replication Instance IAM Role
-resource "aws_iam_role" "dms_vpc_role" {
-  name = "${var.env}-dms-vpc-role"
-  assume_role_policy = data.aws_iam_policy_document.dms_vpc_assume_role.json
-}
+# resource "aws_iam_role" "dms_vpc_role" {
+#   name = "${var.env}-dms-vpc-role"
+#   assume_role_policy = data.aws_iam_policy_document.dms_vpc_assume_role.json
+# }
 
-data "aws_iam_policy_document" "dms_vpc_assume_role" {
-  statement {
-    actions = ["sts:AssumeRole"]
-    principals {
-      type        = "Service"
-      identifiers = ["dms.amazonaws.com"]
-    }
-  }
-}
+# data "aws_iam_policy_document" "dms_vpc_assume_role" {
+#   statement {
+#     actions = ["sts:AssumeRole"]
+#     principals {
+#       type        = "Service"
+#       identifiers = ["dms.amazonaws.com"]
+#     }
+#   }
+# }
 
-resource "aws_iam_role_policy_attachment" "dms_vpc_policy" {
-  role       = aws_iam_role.dms_vpc_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonDMSVPCManagementRole"
-}
+# resource "aws_iam_role_policy_attachment" "dms_vpc_policy" {
+#   role       = aws_iam_role.dms_vpc_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonDMSVPCManagementRole"
+# }
 
 # Glue ETL IAM Role (预留，后续可扩展)
 # resource "aws_iam_role" "glue_etl_role" {

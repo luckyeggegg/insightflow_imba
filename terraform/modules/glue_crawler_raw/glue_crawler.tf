@@ -31,10 +31,16 @@ resource "aws_glue_crawler" "raw_orders" {
 
   s3_target {
     path = "s3://${var.s3_bucket_name}/${var.s3_raw_data_prefix}/orders/"
-    # 排除临时文件和隐藏文件
+
+    # 只包含 .csv 和 .gz 文件
+    # AWS Glue Crawler 支持 include patterns 语法如下：
+    # https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html
+    # 但 Terraform 目前只支持 exclusions，建议占位符文件命名为 .txt 并用 exclusions 排除
+    # 这里补充 exclusions，确保 _placeholder_for_crawler.txt 被排除
     exclusions = [
       "**/_temporary/**",
-      "**/.*"
+      "**/.*",
+      "*.txt"
     ]
   }
 
@@ -83,7 +89,8 @@ resource "aws_glue_crawler" "raw_products" {
     path = "s3://${var.s3_bucket_name}/${var.s3_raw_data_prefix}/products/"
     exclusions = [
       "**/_temporary/**",
-      "**/.*"
+      "**/.*",
+      "*.txt"
     ]
   }
 
@@ -131,7 +138,8 @@ resource "aws_glue_crawler" "raw_departments" {
     path = "s3://${var.s3_bucket_name}/${var.s3_raw_data_prefix}/departments/"
     exclusions = [
       "**/_temporary/**",
-      "**/.*"
+      "**/.*",
+      "*.txt"
     ]
   }
 
@@ -179,7 +187,8 @@ resource "aws_glue_crawler" "raw_aisles" {
     path = "s3://${var.s3_bucket_name}/${var.s3_raw_data_prefix}/aisles/"
     exclusions = [
       "**/_temporary/**",
-      "**/.*"
+      "**/.*",
+      "*.txt"
     ]
   }
 
@@ -234,7 +243,8 @@ resource "aws_glue_crawler" "raw_order_products_prior" {
     path = "s3://${var.s3_bucket_name}/${var.s3_raw_data_prefix}/order_products_prior/"
     exclusions = [
       "**/_temporary/**",
-      "**/.*"
+      "**/.*",
+      "*.txt"
     ]
   }
 
@@ -282,7 +292,8 @@ resource "aws_glue_crawler" "raw_order_products_train" {
     path = "s3://${var.s3_bucket_name}/${var.s3_raw_data_prefix}/order_products_train/"
     exclusions = [
       "**/_temporary/**",
-      "**/.*"
+      "**/.*",
+      "*.txt"
     ]
   }
 

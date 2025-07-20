@@ -30,10 +30,15 @@ output "postgres_security_group_id" {
   value       = aws_security_group.postgres.id
 }
 
-output "dms_security_group_id" {
-  description = "ID of the DMS replication instance security group"
-  value       = aws_security_group.dms_sg.id
+output "lambda_sync_raw_security_group_id" {
+  description = "ID of the Lambda sync raw security group"
+  value       = aws_security_group.lambda_sg.id
 }
+
+# output "dms_security_group_id" {
+#   description = "ID of the DMS replication instance security group"
+#   value       = aws_security_group.dms_sg.id
+# }
 
 ## 以下output与已注释/删除的EMR、MWAA资源相关，已注释，后续如需可恢复
 # output "emr_managed_master_security_group" {

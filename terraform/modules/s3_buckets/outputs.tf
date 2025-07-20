@@ -15,3 +15,8 @@ output "bucket_arns" {
   ]
 }
 
+output "raw_bucket_arn" {
+  description = "ARN of the raw S3 bucket"
+  value       = aws_s3_bucket.buckets[var.raw_bucket].arn
+}
+

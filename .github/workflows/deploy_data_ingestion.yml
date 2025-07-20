@@ -44,6 +44,13 @@ jobs:
       TF_VAR_raw_prefix: data/batch
       TF_VAR_aws_az: ap-southeast-2a
 
+      # Data Sync Raw Configuration Variables
+      TF_VAR_table_name: "orders"
+      TF_VAR_s3_key_prefix: "data/batch/orders/"
+      TF_VAR_start_ts: "1900-01-01-0000"
+      TF_VAR_end_ts: "2099-12-31-2359"
+      TF_VAR_eventbridge_schedule: "cron(0 16 * * ? *)"  # 每天UTC 16:00 (悉尼时间凌晨2:00)
+
       # Glue Crawler Configuration Variables
       # TF_VAR_recrawl_behavior: CRAWL_EVERYTHING # Only for the first crawler run
       TF_VAR_recrawl_behavior: CRAWL_NEW_FOLDERS_ONLY # Incremental crawling for subsequent runs
@@ -65,6 +72,13 @@ jobs:
       - name: Terraform Format Check
         run: terraform fmt -check
         working-directory: terraform/dev
+
+      # Create Lambda deployment packages
+      - name: Create Lambda S3 to RDS Raw deployment package
+        run: |
+          cd functions/modules/data_sync/raw
+          zip -r ../../../../terraform/assets/lambda_s3_to_rds_raw.zip lambda_s3_to_rds_raw.py
+        shell: bash
 
       # --- S3 Buckets ---
       - name: Terraform Plan (S3 Buckets Only)
@@ -174,3 +188,22 @@ jobs:
           command: |
             cd terraform/dev
             terraform apply -auto-approve -target=module.glue_crawler_raw
+
+      # --- Data Sync Raw ---
+      - name: Terraform Format Check (Data Sync Raw Module)
+        run: terraform fmt -check -recursive
+        working-directory: terraform/modules/data_sync/raw
+
+      - name: Terraform Plan (Data Sync Raw Only)
+        run: terraform plan -input=false -target=module.data_sync_raw
+        working-directory: terraform/dev
+
+      - name: Terraform Apply (Data Sync Raw Only) with Retry
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 15
+          max_attempts: 3
+          retry_wait_seconds: 60
+          command: |
+            cd terraform/dev
+            terraform apply -auto-approve -target=module.data_sync_raw

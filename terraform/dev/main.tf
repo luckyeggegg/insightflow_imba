@@ -10,6 +10,7 @@ data "aws_caller_identity" "current" {}
 module "s3_buckets" {
   source       = "../modules/s3_buckets"
   bucket_names = [var.raw_bucket, var.clean_bucket]
+  raw_bucket   = var.raw_bucket
 }
 
 module "vpc" {
@@ -134,6 +135,38 @@ module "glue_crawler_raw" {
   }
 
   depends_on = [module.s3_buckets]
+}
+
+module "data_sync_raw" {
+  source = "../modules/data_sync/raw"
+
+  lambda_zip_path = "../assets/lambda_s3_to_rds_raw.zip"
+  s3_bucket_name  = var.raw_bucket
+  s3_bucket_arn   = module.s3_buckets.raw_bucket_arn
+
+  rds_host     = module.rds_postgresql.rds_host
+  rds_port     = module.rds_postgresql.rds_port
+  rds_db       = var.db_name
+  rds_user     = var.db_username
+  rds_password = var.db_password
+
+  table_name  = var.table_name
+  schema_name = "insightflow_raw"
+
+  # NOTE: batch_size cannot be too large otherwise it will exceed the limit of RDS connection.
+  batch_size = "10000"
+
+  s3_key_prefix = var.s3_key_prefix
+  start_ts      = var.start_ts
+  end_ts        = var.end_ts
+
+
+  eventbridge_schedule = var.eventbridge_schedule
+
+  private_subnet_ids       = module.vpc.private_subnet_ids
+  lambda_security_group_id = module.vpc.lambda_sync_raw_security_group_id
+
+  depends_on = [module.vpc, module.rds_postgresql, module.s3_buckets]
 }
 
 # =============================

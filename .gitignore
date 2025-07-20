@@ -37,6 +37,7 @@ test.py
 
 # Lambda build artifacts
 **/batch_ingestion_lambda/
+**/lambda_s3_to_rds_raw_build/
 *.egg-info/
 # Only need to upload the zip file once
 !/terraform/assets/*.zip
