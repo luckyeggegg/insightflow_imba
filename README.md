@@ -171,6 +171,3 @@ Streaming ingestion module (future extension):
 
 Yifan Sun (Aaron)
 [LinkedIn](http://www.linkedin.com/in/yifan-sun-aaron/)
-
-Zidan Guo (Tobby)
-[LinkedIn]()
